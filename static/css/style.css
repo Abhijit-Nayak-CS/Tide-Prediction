@@ -1,0 +1,753 @@
+/* ==========================================================================
+   POWER BI STYLE MILITARY DEFENSE PORTAL THEME
+   ========================================================================== */
+:root {
+    --pbi-bg: #0b111e;
+    --pbi-topbar: #070d18;
+    --pbi-card: #111a2e;
+    --pbi-card-border: #1e2c4a;
+    --pbi-card-hover: #16223b;
+    --pbi-primary: #00b4d8;
+    --pbi-accent: #f59e0b;
+    --pbi-safe: #10b981;
+    --pbi-danger: #ef4444;
+    --pbi-warning: #facc15;
+    --pbi-text: #f1f5f9;
+    --pbi-subtext: #94a3b8;
+    --pbi-muted: #64748b;
+    --font-head: 'Orbitron', sans-serif;
+    --font-sub: 'Rajdhani', sans-serif;
+    --font-main: 'Inter', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body.powerbi-theme {
+    background-color: var(--pbi-bg);
+    color: var(--pbi-text);
+    font-family: var(--font-main);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+}
+
+/* ================= Top Bar ================= */
+.pbi-topbar {
+    background: var(--pbi-topbar);
+    border-bottom: 1px solid var(--pbi-card-border);
+    padding: 10px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.drdo-emblem {
+    font-size: 26px;
+    color: var(--pbi-primary);
+    background: rgba(0, 180, 216, 0.12);
+    border: 1px solid rgba(0, 180, 216, 0.35);
+    padding: 8px 12px;
+    border-radius: 6px;
+}
+
+.title-meta h1 {
+    font-family: var(--font-head);
+    font-size: 15px;
+    letter-spacing: 1px;
+    color: #ffffff;
+}
+
+.title-meta p {
+    font-family: var(--font-sub);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--pbi-primary);
+    letter-spacing: 0.5px;
+}
+
+.classification-pill {
+    font-family: var(--font-sub);
+    font-size: 11px;
+    font-weight: 700;
+    color: #fbbf24;
+    letter-spacing: 1px;
+    display: inline-block;
+    margin-bottom: 2px;
+}
+
+.topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.powerbi-badge {
+    background: #f59e0b;
+    color: #000;
+    font-family: var(--font-sub);
+    font-weight: 700;
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.status-indicator {
+    font-family: var(--font-sub);
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--pbi-safe);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(16, 185, 129, 0.12);
+    padding: 5px 12px;
+    border-radius: 20px;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.pulsing-beacon {
+    width: 8px;
+    height: 8px;
+    background-color: var(--pbi-safe);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--pbi-safe);
+    animation: beacon 1.6s infinite;
+}
+
+@keyframes beacon {
+    0% { transform: scale(0.8); opacity: 0.5; }
+    50% { transform: scale(1.3); opacity: 1; }
+    100% { transform: scale(0.8); opacity: 0.5; }
+}
+
+.clock-chip {
+    font-family: var(--font-head);
+    font-size: 14px;
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 6px 12px;
+    border-radius: 6px;
+}
+
+/* ================= Workspace Layout ================= */
+.pbi-workspace {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 18px;
+    padding: 18px 24px;
+    flex: 1;
+}
+
+/* ================= Filter / Slicer Pane ================= */
+.pbi-filter-pane {
+    background: var(--pbi-card);
+    border: 1px solid var(--pbi-card-border);
+    border-radius: 8px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    height: fit-content;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.pane-headline h3 {
+    font-family: var(--font-sub);
+    font-size: 16px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+}
+
+.pane-headline .sub {
+    font-size: 11px;
+    color: var(--pbi-subtext);
+}
+
+.slicer-category-header {
+    font-family: var(--font-sub);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--pbi-primary);
+    background: rgba(0, 180, 216, 0.08);
+    border-left: 3px solid var(--pbi-primary);
+    padding: 4px 8px;
+    border-radius: 2px;
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.slicer-box {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.slicer-box label {
+    font-family: var(--font-sub);
+    font-size: 13px;
+    font-weight: 600;
+    color: #cbd5e1;
+}
+
+.slicer-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.slicer-val {
+    font-family: var(--font-head);
+    font-size: 11px;
+    color: var(--pbi-primary);
+    background: rgba(0, 180, 216, 0.1);
+    border: 1px solid rgba(0, 180, 216, 0.3);
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.pbi-input {
+    background: rgba(7, 13, 24, 0.85);
+    border: 1px solid var(--pbi-card-border);
+    color: #ffffff;
+    font-family: var(--font-main);
+    font-size: 13px;
+    padding: 8px 10px;
+    border-radius: 4px;
+    outline: none;
+}
+
+.pbi-input:focus {
+    border-color: var(--pbi-primary);
+}
+
+.pbi-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 5px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.12);
+    outline: none;
+}
+
+.pbi-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--pbi-primary);
+    cursor: pointer;
+    box-shadow: 0 0 8px var(--pbi-primary);
+}
+
+.tick-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: var(--pbi-muted);
+}
+
+.slicer-hint {
+    font-size: 10px;
+    color: var(--pbi-muted);
+}
+
+.pbi-btn-action {
+    background: linear-gradient(135deg, #0077b6 0%, #0096c7 100%);
+    color: #ffffff;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    font-family: var(--font-head);
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 6px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.pbi-btn-action:hover {
+    background: linear-gradient(135deg, #0096c7 0%, #48cae4 100%);
+    box-shadow: 0 4px 15px rgba(0, 180, 216, 0.4);
+}
+
+/* ================= Main Canvas ================= */
+.pbi-main-canvas {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Command Banner */
+.mission-status-banner {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 14px 22px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.mission-status-banner.banner-safe {
+    background: linear-gradient(90deg, rgba(16, 185, 129, 0.18) 0%, rgba(17, 26, 46, 0.95) 100%);
+    border-color: rgba(16, 185, 129, 0.4);
+    border-left: 6px solid var(--pbi-safe);
+}
+
+.mission-status-banner.banner-danger {
+    background: linear-gradient(90deg, rgba(239, 68, 68, 0.22) 0%, rgba(17, 26, 46, 0.95) 100%);
+    border-color: rgba(239, 68, 68, 0.45);
+    border-left: 6px solid var(--pbi-danger);
+}
+
+.status-icon-wrap i {
+    font-size: 38px;
+}
+
+.banner-safe .status-icon-wrap i { color: var(--pbi-safe); }
+.banner-danger .status-icon-wrap i { color: var(--pbi-danger); }
+
+.status-details {
+    flex: 1;
+}
+
+.status-headline-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 4px;
+}
+
+.status-headline-row h2 {
+    font-family: var(--font-head);
+    font-size: 17px;
+    letter-spacing: 0.5px;
+}
+
+.banner-safe h2 { color: var(--pbi-safe); }
+.banner-danger h2 { color: var(--pbi-danger); }
+
+.pbi-badge-pill {
+    font-family: var(--font-sub);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 12px;
+}
+
+.badge-ebb { background: rgba(16, 185, 129, 0.2); color: var(--pbi-safe); border: 1px solid var(--pbi-safe); }
+.badge-flood { background: rgba(239, 68, 68, 0.2); color: var(--pbi-danger); border: 1px solid var(--pbi-danger); }
+.badge-high { background: rgba(250, 204, 21, 0.2); color: var(--pbi-warning); border: 1px solid var(--pbi-warning); }
+.badge-low { background: rgba(0, 180, 216, 0.2); color: var(--pbi-primary); border: 1px solid var(--pbi-primary); }
+
+.status-details p {
+    font-size: 13px;
+    color: var(--pbi-subtext);
+}
+
+.status-auth-box {
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.auth-label {
+    font-size: 10px;
+    color: var(--pbi-muted);
+}
+
+.auth-id {
+    font-family: var(--font-head);
+    font-size: 11px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 4px 10px;
+    border-radius: 4px;
+    color: var(--pbi-primary);
+}
+
+/* ================= KPI Visual Row ================= */
+.pbi-card-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 14px;
+}
+
+.pbi-card {
+    background: var(--pbi-card);
+    border: 1px solid var(--pbi-card-border);
+    border-radius: 6px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    transition: transform 0.2s, background 0.2s;
+}
+
+.pbi-card:hover {
+    background: var(--pbi-card-hover);
+    transform: translateY(-2px);
+}
+
+.card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--font-sub);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--pbi-subtext);
+}
+
+.card-metric {
+    font-family: var(--font-head);
+    font-size: 24px;
+    color: #ffffff;
+}
+
+.card-metric small {
+    font-size: 13px;
+    color: var(--pbi-primary);
+}
+
+.card-metric.accent-blue { color: var(--pbi-primary); }
+.card-metric.font-weather { color: #f59e0b; }
+
+.card-footer {
+    font-size: 11px;
+    color: var(--pbi-muted);
+}
+
+.card-footer.positive { color: var(--pbi-safe); font-weight: 600; }
+.card-footer.negative { color: var(--pbi-danger); font-weight: 600; }
+
+/* ================= Weather Telemetry Row ================= */
+.weather-telemetry-row {
+    background: var(--pbi-card);
+    border: 1px solid var(--pbi-card-border);
+    border-radius: 6px;
+    padding: 12px 18px;
+}
+
+.weather-pill-box {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+}
+
+.pill-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 8px 12px;
+    border-radius: 6px;
+}
+
+.pill-item i {
+    font-size: 20px;
+    color: var(--pbi-accent);
+}
+
+.pill-item div {
+    display: flex;
+    flex-direction: column;
+}
+
+.plabel {
+    font-size: 11px;
+    color: var(--pbi-muted);
+}
+
+.pill-item strong {
+    font-family: var(--font-sub);
+    font-size: 14px;
+    color: #ffffff;
+}
+
+/* ================= Power BI Chart Panel ================= */
+.pbi-chart-panel {
+    background: var(--pbi-card);
+    border: 1px solid var(--pbi-card-border);
+    border-radius: 8px;
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.panel-top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chart-title h4 {
+    font-family: var(--font-sub);
+    font-size: 16px;
+    font-weight: 700;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.chart-title p {
+    font-size: 12px;
+    color: var(--pbi-subtext);
+}
+
+.chart-legend-chips {
+    display: flex;
+    gap: 12px;
+}
+
+.chip {
+    font-size: 11px;
+    font-family: var(--font-sub);
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.chip-water { background: rgba(0, 180, 216, 0.15); color: var(--pbi-primary); }
+.chip-limit { background: rgba(239, 68, 68, 0.15); color: var(--pbi-danger); }
+.chip-safe { background: rgba(16, 185, 129, 0.15); color: var(--pbi-safe); }
+
+.canvas-container {
+    width: 100%;
+    height: 270px;
+}
+
+/* ================= Stumps Visual Grid ================= */
+.stump-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+}
+
+.stump-card-item {
+    background: rgba(7, 13, 24, 0.7);
+    border: 1px solid var(--pbi-card-border);
+    border-radius: 6px;
+    padding: 12px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    position: relative;
+}
+
+.stump-card-item.is-dry {
+    border-top: 3px solid var(--pbi-safe);
+}
+
+.stump-card-item.is-flooded {
+    border-top: 3px solid var(--pbi-danger);
+}
+
+.stump-distance-title {
+    font-family: var(--font-head);
+    font-size: 15px;
+    color: #ffffff;
+}
+
+.stump-subtext {
+    font-size: 11px;
+    color: var(--pbi-muted);
+}
+
+.stump-depth-display {
+    font-family: var(--font-sub);
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.stump-card-item.is-dry .stump-depth-display { color: var(--pbi-safe); }
+.stump-card-item.is-flooded .stump-depth-display { color: var(--pbi-danger); }
+
+.stump-status-tag {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 6px;
+    border-radius: 4px;
+}
+
+.stump-card-item.is-dry .stump-status-tag {
+    background: rgba(16, 185, 129, 0.15);
+    color: var(--pbi-safe);
+}
+
+.stump-card-item.is-flooded .stump-status-tag {
+    background: rgba(239, 68, 68, 0.15);
+    color: var(--pbi-danger);
+}
+
+/* ================= Split Grid (Mahaul + SOP Checklist) ================= */
+.pbi-split-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.pbi-sub-panel {
+    background: var(--pbi-card);
+    border: 1px solid var(--pbi-card-border);
+    border-radius: 8px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.sub-panel-title h4 {
+    font-family: var(--font-sub);
+    font-size: 15px;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.mahaul-viewport {
+    position: relative;
+    width: 100%;
+    height: 180px;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid var(--pbi-card-border);
+}
+
+.mahaul-viewport img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.mahaul-viewport:hover img {
+    transform: scale(1.03);
+}
+
+.viewport-overlay {
+    position: absolute;
+    bottom: 8px;
+    left: 8px;
+    right: 8px;
+    display: flex;
+    justify-content: space-between;
+    background: rgba(7, 13, 24, 0.85);
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+}
+
+.overlay-tag { font-family: var(--font-sub); font-weight: 700; color: var(--pbi-primary); }
+.overlay-dist { color: #f59e0b; font-weight: 600; }
+
+.mahaul-caption strong {
+    font-family: var(--font-sub);
+    font-size: 14px;
+    color: #ffffff;
+}
+
+.mahaul-caption p {
+    font-size: 12px;
+    color: var(--pbi-subtext);
+    margin-top: 4px;
+    line-height: 1.4;
+}
+
+/* Checklist items */
+.checklist-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.check-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.check-item i.fa-check { color: var(--pbi-safe); }
+.check-item i.fa-xmark { color: var(--pbi-danger); }
+
+.sop-note {
+    background: rgba(245, 158, 11, 0.1);
+    border-left: 3px solid var(--pbi-accent);
+    padding: 8px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+    color: #fde68a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* ================= Footer ================= */
+.pbi-footer {
+    background: var(--pbi-topbar);
+    border-top: 1px solid var(--pbi-card-border);
+    padding: 8px 24px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--pbi-muted);
+}
+
+.f-left {
+    display: flex;
+    gap: 10px;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .pbi-workspace { grid-template-columns: 1fr; }
+    .pbi-card-row { grid-template-columns: repeat(3, 1fr); }
+    .weather-pill-box { grid-template-columns: repeat(3, 1fr); }
+    .pbi-split-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 768px) {
+    .pbi-card-row { grid-template-columns: 1fr 1fr; }
+    .stump-cards-grid { grid-template-columns: 1fr 1fr; }
+    .weather-pill-box { grid-template-columns: 1fr 1fr; }
+}

@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DRDO PXE Chandipur - Coastal Defense & Mission Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        /* Switch Toggle CSS */
+        .switch { position: relative; display: inline-block; width: 40px; height: 20px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #334155; transition: .4s; border-radius: 20px; }
+        .slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: #f59e0b; }
+        input:checked + .slider:before { transform: translateX(20px); }
+    </style>
+</head>
+<body class="powerbi-theme">
+
+    <header class="pbi-topbar">
+        <div class="topbar-left">
+            <div class="drdo-emblem" style="background: linear-gradient(135deg, #f59e0b, #b45309); color: #fff; display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 10px; font-size: 1.5rem; box-shadow: 0 0 15px rgba(245, 158, 11, 0.5); border: 2px solid #fbbf24;">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <div class="title-meta">
+                <span class="classification-pill"><i class="fa-solid fa-lock"></i> DRDO-PXE CONFIDENTIAL &bull; DEFENSE TELEMETRY</span>
+                <h1>PROOF & EXPERIMENTAL ESTABLISHMENT (PXE) &bull; CHANDIPUR</h1>
+                <p>AUTONOMOUS INTERTIDAL MUDFLAT PREDICTION, WEAPON TESTING & RANGE CLEARANCE PORTAL</p>
+            </div>
+        </div>
+        <div class="topbar-right">
+            <!-- API Scan Health Indicator Pill -->
+            <div id="weatherApiPill" style="display: flex; align-items: center; gap: 6px; background: rgba(16, 185, 129, 0.15); border: 1px solid #10b981; padding: 4px 10px; border-radius: 6px; font-size: 0.7rem; color: #10b981; font-family: 'Orbitron', sans-serif;">
+                <span id="weatherBeacon" style="width: 7px; height: 7px; background: #10b981; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px #10b981; animation: pulse 1.5s infinite;"></span>
+                API SCAN: <span id="weatherStatusText">ACTIVE</span>
+            </div>
+
+            <div class="clock-chip" id="digitalClock">--:--:-- IST</div>
+            
+            <!-- Push to Main DB Button in Topbar Right -->
+            <button id="btnMergeMain" class="btn btn-sm" style="background: #10b981; color: #fff; font-weight: bold; border-radius: 6px; padding: 6px 12px; border: none; cursor: pointer; font-family: 'Orbitron', sans-serif; font-size: 0.75rem; box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);">
+                <i class="fa-solid fa-file-export"></i> Push to Main DB
+            </button>
+
+            <div class="pxe-official-logo" style="background: linear-gradient(135deg, #0f172a, #1e293b); border: 1.5px solid #38bdf8; padding: 5px 12px; border-radius: 8px; display: flex; align-items: center; gap: 10px; box-shadow: 0 0 12px rgba(56, 189, 248, 0.3);">
+                <div style="background: #38bdf8; color: #0f172a; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-family: 'Orbitron', sans-serif; font-size: 0.8rem; box-shadow: 0 0 8px rgba(56,189,248,0.6);">PXE</div>
+                <div style="display: flex; flex-direction: column; text-align: left;">
+                    <span style="font-size: 0.6rem; color: #38bdf8; font-weight: 700; letter-spacing: 0.5px;">DRDO INDIA</span>
+                    <span style="font-size: 0.75rem; color: #f8fafc; font-family: 'Orbitron', sans-serif; font-weight: bold;">CHANDIPUR</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="pbi-workspace">
+        <!-- Left Filter Pane -->
+        <aside class="pbi-filter-pane">
+            <div class="pane-headline">
+                <h3><i class="fa-solid fa-filter"></i> PARAMETER SLICERS</h3>
+                <span class="sub">Dynamic Mission Input Controls</span>
+            </div>
+
+            <div class="slicer-box">
+                <label><i class="fa-regular fa-calendar"></i> Mission Date</label>
+                <input type="date" id="dateInput" value="2026-10-08" class="pbi-input">
+            </div>
+
+            <div class="slicer-box">
+                <div class="slicer-title-row">
+                    <label><i class="fa-regular fa-clock"></i> Hour & Minute (IST)</label>
+                    <span class="slicer-val" id="hourVal">10:00 IST</span>
+                </div>
+                <input type="range" id="hourInput" min="0" max="23.99" value="10" step="0.01" class="pbi-slider">
+            </div>
+
+            <div class="slicer-box" style="background: rgba(15, 23, 42, 0.6); padding: 8px; border-radius: 6px; border: 1px dashed #334155;">
+                <label style="font-size: 11px; color: #38bdf8; font-weight: 600;"><i class="fa-solid fa-keyboard"></i> Manual Time (HH:MM)</label>
+                <div style="display: flex; gap: 6px; margin-top: 4px;">
+                    <input type="time" id="manualTimeInput" value="10:00" class="pbi-input" style="flex: 1; padding: 4px;">
+                    <button type="button" id="btnSetTime" style="background: #38bdf8; color: #0f172a; border: none; font-weight: bold; padding: 4px 8px; border-radius: 4px; cursor: pointer;">Set</button>
+                </div>
+            </div>
+
+            <button type="button" id="btnUpdate" class="pbi-btn-action" style="margin-top: 15px;">
+                <i class="fa-solid fa-arrows-rotate"></i> RECALCULATE TELEMETRY
+            </button>
+
+            <!-- Operator Water Gauge Staging Console -->
+            <div style="margin-top: 20px; border-top: 1px solid var(--pbi-card-border); padding-top: 15px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <h4 style="font-family: var(--font-head); color: #f59e0b; font-size: 13px; margin: 0;">
+                        <i class="fa-solid fa-water"></i> WATER GAUGE STAGING CONSOLE
+                    </h4>
+                </div>
+                <p style="color: var(--pbi-subtext); font-size: 11px; margin-bottom: 8px;">Input physical water gauge readings (m) across posts.</p>
+                
+                <!-- Auto-Telemetry Toggle Switch Inside Staging Form with 15-Min Timer -->
+                <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid #334155; padding: 6px 10px; border-radius: 6px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between;">
+                    <span style="color: #38bdf8; font-size: 11px; font-weight: 600;">
+                        Auto Staging (<span id="autoLogTimer">15m 00s</span>)
+                    </span>
+                    <label class="switch">
+                        <input type="checkbox" id="autoLogToggle">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <form id="comprehensiveFeedForm" style="display: flex; flex-direction: column; gap: 8px;">
+                    <div>
+                        <label style="color: var(--pbi-subtext); font-size: 11px; font-weight: 600;">Mission Date *:</label>
+                        <input type="date" id="feedDate" class="pbi-input" style="width: 100%; margin-top: 2px;" value="2026-10-08" required>
+                    </div>
+                    <div>
+                        <label style="color: var(--pbi-subtext); font-size: 11px; font-weight: 600;">Time (HH:MM) *:</label>
+                        <input type="time" id="feedTime" class="pbi-input" style="width: 100%; margin-top: 2px;" value="10:00" required>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+                        <div>
+                            <label style="color: var(--pbi-subtext); font-size: 10px;">50m Gauge (m):</label>
+                            <input type="number" id="feedGauge50" class="pbi-input" step="0.01" value="0.00" style="width: 100%;">
+                        </div>
+                        <div>
+                            <label style="color: var(--pbi-subtext); font-size: 10px;">100m Gauge (m):</label>
+                            <input type="number" id="feedGauge100" class="pbi-input" step="0.01" value="0.00" style="width: 100%;">
+                        </div>
+                        <div>
+                            <label style="color: var(--pbi-subtext); font-size: 10px;">200m Gauge (m):</label>
+                            <input type="number" id="feedGauge200" class="pbi-input" step="0.01" value="0.00" style="width: 100%;">
+                        </div>
+                        <div>
+                            <label style="color: var(--pbi-subtext); font-size: 10px;">500m Gauge (m):</label>
+                            <input type="number" id="feedGauge500" class="pbi-input" step="0.01" value="0.00" style="width: 100%;">
+                        </div>
+                    </div>
+                    <div>
+                        <label style="color: var(--pbi-subtext); font-size: 10px;">1000m Gauge (m):</label>
+                        <input type="number" id="feedGauge1000" class="pbi-input" step="0.01" value="0.00" style="width: 100%;">
+                    </div>
+                    <div id="operatorFormError" style="color: var(--pbi-danger); font-size: 11px; font-weight: bold;"></div>
+
+                    <button type="submit" class="pbi-btn-action" style="width: 100%; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: #000; font-weight: bold; margin-top: 6px;">
+                        <i class="fa-solid fa-cloud-arrow-up"></i> PUSH TO STAGING DB
+                    </button>
+                </form>
+                <div id="operatorCommitResult" style="margin-top: 8px; text-align: center; font-weight: bold; font-size: 12px;"></div>
+            </div>
+        </aside>
+
+        <!-- Right Main Canvas -->
+        <main class="pbi-main-canvas">
+            <!-- Clearance Banner -->
+            <div id="clearanceBanner" class="mission-status-banner banner-safe">
+                <div class="status-icon-wrap"><i id="statusIcon" class="fa-solid fa-circle-check"></i></div>
+                <div class="status-details">
+                    <div class="status-headline-row">
+                        <h2 id="statusTitle">RANGE STATE: CLEAR FOR FIRING (SAFE)</h2>
+                        <span id="tideStageBadge" class="pbi-badge-pill badge-ebb">Ebb Tide</span>
+                    </div>
+                    <p id="statusDesc">Chandipur compacted intertidal floor is sufficiently exposed past the 500m safety line.</p>
+                </div>
+                <div class="status-auth-box">
+                    <span class="auth-label">BALLISTIC PROTOCOL</span>
+                    <span class="auth-id" id="authCode">PXE-AUTH-CLEAR</span>
+                </div>
+            </div>
+
+            <!-- KPI Cards Row -->
+            <div class="pbi-card-row">
+                <div class="pbi-card">
+                    <div class="card-top"><i class="fa-solid fa-water"></i> <span>SEA LEVEL (GAUGE)</span></div>
+                    <div class="card-metric" id="kpiLevel">2.45 <small>m</small></div>
+                    <div class="card-footer" id="kpiLevelSub">-0.15 m vs Mean Sea Level</div>
+                </div>
+                <div class="pbi-card">
+                    <div class="card-top"><i class="fa-solid fa-road"></i> <span>DRY BED EXPOSURE</span></div>
+                    <div class="card-metric accent-blue" id="kpiExposure">775.0 <small>m</small></div>
+                    <div class="card-footer" id="kpiExposureSub">Receded Seaward Floor</div>
+                </div>
+                <div class="pbi-card">
+                    <div class="card-top"><i class="fa-solid fa-location-crosshairs"></i> <span>500M STUMP DEPTH</span></div>
+                    <div class="card-metric" id="kpi500m">0.00 <small>m</small></div>
+                    <div class="card-footer positive" id="kpi500mSub">Dry & Solid Base (Target: 0m)</div>
+                </div>
+                <div class="pbi-card">
+                    <div class="card-top"><i class="fa-solid fa-gauge-high"></i> <span>RUSH VELOCITY (dh/dt)</span></div>
+                    <div class="card-metric" id="kpiRate">-0.82 <small>m/h</small></div>
+                    <div class="card-footer" id="kpiRateSub">Receding Ebb Phase</div>
+                </div>
+                <div class="pbi-card">
+                    <div class="card-top"><i class="fa-solid fa-cloud-bolt"></i> <span>COASTAL WEATHER</span></div>
+                    <div class="card-metric font-weather" id="kpiTemp">31.2 <small>&deg;C</small></div>
+                    <div class="card-footer" id="kpiWeatherSummary">Clear Ballistic Horizon</div>
+                </div>
+            </div>
+
+            <!-- Weather Telemetry Bar -->
+            <div class="weather-telemetry-row">
+                <div class="weather-pill-box">
+                    <div class="pill-item"><i class="fa-solid fa-temperature-half"></i><div><span class="plabel">Ambient Temp</span><strong id="wTemp">31.2 &deg;C</strong></div></div>
+                    <div class="pill-item"><i class="fa-solid fa-droplet"></i><div><span class="plabel">Relative Humidity</span><strong id="wHumidity">76.4 %</strong></div></div>
+                    <div class="pill-item"><i class="fa-solid fa-gauge"></i><div><span class="plabel">Surface Pressure</span><strong id="wPressure">1011.8 hPa</strong></div></div>
+                    <div class="pill-item"><i class="fa-solid fa-binoculars"></i><div><span class="plabel">Optical Visibility</span><strong id="wVisibility">11.5 km</strong></div></div>
+                    <div class="pill-item"><i class="fa-solid fa-compass"></i><div><span class="plabel">Wind Vector</span><strong id="wVector">5.5 m/s &bull; 180&deg;</strong></div></div>
+                </div>
+            </div>
+
+            <!-- 24-Hour Tidal Horizon Chart -->
+            <div class="pbi-chart-panel">
+                <div class="panel-top-row">
+                    <div class="chart-title">
+                        <h4><i class="fa-solid fa-chart-line"></i> 24-HOUR CONTINUOUS TIDAL FORECAST & MISSION TESTING WINDOWS</h4>
+                        <p>Continuous semidiurnal curve. Green shaded area highlights safe ground clearance below 3.00m.</p>
+                    </div>
+                </div>
+                <div class="canvas-container"><canvas id="tideForecastChart"></canvas></div>
+            </div>
+
+            <!-- Spatial Stump Submersion Profile -->
+            <div class="pbi-chart-panel">
+                <div class="panel-top-row">
+                    <div class="chart-title">
+                        <h4><i class="fa-solid fa-ruler-horizontal"></i> SPATIAL STUMP SUBMERSION PROFILE (0m &rarr; 1000m Seaward)</h4>
+                        <p>Real-time depth telemetry across Chandipur's flat sea bed boundary posts.</p>
+                    </div>
+                </div>
+                <div class="stump-cards-grid" id="stumpGrid"></div>
+            </div>
+
+            <!-- Environment Simulation (Mahaul) & Checklist -->
+            <div class="pbi-split-grid">
+                <div class="pbi-sub-panel">
+                    <div class="sub-panel-title"><h4><i class="fa-solid fa-camera-retro"></i> COASTAL ENVIRONMENT SIMULATION (MAHAUL)</h4></div>
+                    <div class="mahaul-viewport">
+                        <img id="mahaulPhoto" src="/static/images/mudflat_dry.png" alt="Mudflat Condition">
+                        <div class="viewport-overlay" id="photoOverlay">
+                            <span class="overlay-tag" id="photoTag">ENVIRONMENT: DRY FIRM MUDFLAT</span>
+                            <span class="overlay-dist" id="photoDist">2.0 KM WATER RECESSION</span>
+                        </div>
+                    </div>
+                    <div class="mahaul-caption">
+                        <strong id="photoTitle">Natural Hard Compacted Mudflat Exposed</strong>
+                        <p id="photoDesc">Low tide receded into Bay of Bengal. Natural hard soil allows deployment of tracking radar antennas and recovery vehicles.</p>
+                    </div>
+                </div>
+
+                <div class="pbi-sub-panel">
+                    <div class="sub-panel-title"><h4><i class="fa-solid fa-clipboard-check"></i> RANGE SAFETY OFFICER (RSO) PRE-FIRING AUDIT</h4></div>
+                    <div class="checklist-container" id="checklistContainer"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- JavaScript Handler Link -->
+    <script src="/static/js/main.js"></script>
+    <script>
+        // Manual Time Input Sync Script
+        document.getElementById("btnSetTime").addEventListener("click", function() {
+            const timeVal = document.getElementById("manualTimeInput").value;
+            if (timeVal) {
+                const [hrs, mins] = timeVal.split(':').map(Number);
+                const decimalHour = hrs + (mins / 60);
+                document.getElementById("hourInput").value = decimalHour;
+                if (typeof updateLabels === 'function') updateLabels();
+                if (typeof fetchTelemetry === 'function') fetchTelemetry();
+            }
+        });
+
+        // Fetch and Update API Scan Health Status Indicators
+        function checkApiHealth() {
+            fetch('/api_health')
+                .then(res => res.json())
+                .then(data => {
+                    const weatherPill = document.getElementById("weatherApiPill");
+                    const weatherBeacon = document.getElementById("weatherBeacon");
+                    const weatherText = document.getElementById("weatherStatusText");
+
+                    if (data.weather_api_healthy) {
+                        weatherPill.style.borderColor = "#10b981";
+                        weatherPill.style.color = "#10b981";
+                        weatherPill.style.background = "rgba(16, 185, 129, 0.15)";
+                        weatherBeacon.style.background = "#10b981";
+                        weatherBeacon.style.boxShadow = "0 0 8px #10b981";
+                        weatherText.innerText = "ACTIVE (LIVE)";
+                    } else {
+                        weatherPill.style.borderColor = "#ef4444";
+                        weatherPill.style.color = "#ef4444";
+                        weatherPill.style.background = "rgba(239, 68, 68, 0.15)";
+                        weatherBeacon.style.background = "#ef4444";
+                        weatherBeacon.style.boxShadow = "0 0 8px #ef4444";
+                        weatherText.innerText = "FALLBACK (DB/MATH)";
+                    }
+                })
+                .catch(err => console.error("API Scan Health Check Failed:", err));
+        }
+
+        setInterval(checkApiHealth, 10000);
+        window.addEventListener("DOMContentLoaded", checkApiHealth);
+
+        // Merge Staging to Main DB Handler
+        document.getElementById("btnMergeMain").addEventListener("click", function() {
+            if(confirm("Kya aap staging ka data main database mein merge karna chahte hain?")) {
+                fetch('/merge_staging', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                })
+                .then(res => res.json())
+                .then(data => {
+                    alert(data.message || "Data successfully merged to main database!");
+                })
+                .catch(err => console.error('Merge Error:', err));
+            }
+        });
+    </script>
+</body>
+</html>
