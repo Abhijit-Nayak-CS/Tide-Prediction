@@ -128,6 +128,13 @@ celerybeat.pid
 *.sage.py
 
 # Environments
+# artifacts/
+*.joblib
+*.sqlite3
+*.db
+.vscode/
+__pycache__/
+Tide-Prediction-venv/
 .env
 .venv
 env/
